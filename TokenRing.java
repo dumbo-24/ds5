@@ -1,107 +1,66 @@
-
-//DS Assignment 5: Implement token ring based mutual exclusion algorithm.
-
 import java.util.*;
 
-public class TokenRing {
 
-    private int n; // Number of processes
-    private int[] state;
-    private boolean token;
 
-    public TokenRing(int n) {
-        this.n = n;
-        state = new int[n];
-    }
+public class TokenRing{
 
-    public void run() {
-        // Initialize the ring
-        for (int i = 0; i < n; i++) {
-            state[i] = 0; // not in critical section
-        }
+	public static void main(String[] args){
+		Scanner sc = new Scanner(System.in);
+		
+		System.out.print("Enter Number Of Nodes You Want In The Ring : ");
+		int n = sc.nextInt();
+		
+		System.out.println("Ring Formed Is As Below: ");
+		for(int i=0; i<n; i++){
+			System.out.print(i + " ");
+		}
+		
+		System.out.println("0");
+		
+		
+		int choice = 0;
+		int token = 0;
+		
+		do{
+			System.out.print("Enter Sender : ");
+			int sender = sc.nextInt();
+			
+			System.out.print("Enter Receiver : ");
+			int receiver = sc.nextInt();
+			
+			System.out.print("Enter Data To Send : ");
+			int data = sc.nextInt();
+			
+			
+			System.out.print("Token Passing : ");
+			
+			for(int i=token; i<sender; i++){
+				System.out.print(" " + i + "->");
+			}
+			
+			if(receiver == sender + 1){
+				System.out.println("Sender: " + sender + " Sending The Data: " + data);
+				System.out.println("Receiver: " + receiver + " Received The Data: " + data);
+			}
+			else{
+				System.out.println(" " + sender);
+				System.out.println("Sender:" + sender + " Sending Data: " + data);
+				
+				for(int i=sender; i!=receiver; i = (i+1)%n){
+					System.out.println("Data: " + data + " Forwarded By: " + i);
+				}
+				
+				System.out.println("Receiver: " + receiver + " Received The Data: " + data);
+			}
 
-        // Randomly select the process that will hold the token initially
-        int curr = new Random().nextInt(n);
-        token = true;
-
-        while (true) {
-            if (token) {
-                if (state[curr] == 0) { // not in critical section
-                    enterCritical(curr);
-                    state[curr] = 1; // in critical section
-                } else { // in critical section
-                    exitCritical(curr);
-                    state[curr] = 0; // not in critical section
-
-                    curr = (curr + 1) % n; // pass the token
-                    token = true;
-                }
-            }
-        }
-    }
-
-    private void enterCritical(int id) {
-        // Enter critical section
-        System.out.println("Process " + id + " enters critical section");
-    }
-
-    private void exitCritical(int id) {
-        // Exit critical section
-        System.out.println("Process " + id + " exits critical section");
-        token = false;
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        System.out.print("Enter Number of Processes To Be Created: ");
-        int n = sc.nextInt();
-        sc.close();
-
-        TokenRing tr = new TokenRing(n); // Instantiate a ring of n processes
-        tr.run(); // Run the token ring algorithm
-    }
+			
+			
+			token = sender;
+			
+			System.out.print("Do You Want To Send Data Again? If YES Enter 1, If NO Enter 0: ");
+			choice = sc.nextInt();
+		
+		}while(choice == 1);		
+		
+	}
 }
-/*Commands:
-denzil@denzil-VirtualBox:~/Documents/assignments$ javac TokenRing.java
-
-denzil@denzil-VirtualBox:~/Documents/assignments$ java TokenRing*/
-
-
-/* Output: 
-
-Enter Number of Processes To Be Created: 8
-Process 5 enters critical section
-Process 5 exits critical section
-Process 6 enters critical section
-Process 6 exits critical section
-Process 7 enters critical section
-Process 7 exits critical section
-Process 0 enters critical section
-Process 0 exits critical section
-Process 1 enters critical section
-Process 1 exits critical section
-Process 2 enters critical section
-Process 2 exits critical section
-Process 3 enters critical section
-Process 3 exits critical section
-Process 4 enters critical section
-Process 4 exits critical section
-Process 5 enters critical section
-Process 5 exits critical section
-Process 6 enters critical section
-Process 6 exits critical section
-Process 7 enters critical section
-Process 7 exits critical section
-Process 0 enters critical section
-Process 0 exits critical section
-Process 1 enters critical section
-Process 1 exits critical section
-Process 2 enters critical section
-Process 2 exits critical section
-.
-.
-.
-.
-(program runs infinitely to exit press Ctrl + C)
-*/
-
