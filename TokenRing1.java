@@ -3,7 +3,7 @@
 
 import java.util.*;
 
-public class TokenRing {
+public class TokenRing1 {
 
     private int n; // Number of processes
     private int[] state;
